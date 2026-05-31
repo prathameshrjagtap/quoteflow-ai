@@ -32,6 +32,14 @@ export default function CreateQuote() {
     setItems(updatedItems);
   };
 
+  const removeItem = (index) => {
+    if (items.length === 1) return;
+
+    const updatedItems = items.filter((_, i) => i !== index);
+
+    setItems(updatedItems);
+  };
+
   const subtotal = items.reduce(
     (total, item) => total + item.quantity * item.price,
     0,
@@ -95,7 +103,7 @@ export default function CreateQuote() {
 
         <div className="space-y-4">
           {items.map((item, index) => (
-            <div key={index} className="grid md:grid-cols-3 gap-4">
+            <div key={index} className="grid md:grid-cols-5 gap-4">
               <input
                 type="text"
                 placeholder="Item Name"
@@ -123,6 +131,17 @@ export default function CreateQuote() {
                 }
                 className="bg-slate-950 border border-slate-700 rounded-lg px-4 py-3"
               />
+
+              <div className="bg-slate-950 border border-slate-700 rounded-lg px-4 py-3 flex items-center">
+                ₹{(item.quantity * item.price).toFixed(2)}
+              </div>
+
+              <button
+                onClick={() => removeItem(index)}
+                className="bg-red-600 hover:bg-red-700 rounded-lg px-4 py-3"
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>
