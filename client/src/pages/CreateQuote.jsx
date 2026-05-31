@@ -1,9 +1,11 @@
 import { useState } from "react";
+import QuotePreview from "../components/quote/QuotePreview";
 
 export default function CreateQuote() {
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
 
   const [items, setItems] = useState([
     {
@@ -166,6 +168,25 @@ export default function CreateQuote() {
           </div>
         </div>
       </div>
+      <div className="mt-6">
+        <button
+          onClick={() => setShowPreview(true)}
+          className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold"
+        >
+          Generate Quote
+        </button>
+      </div>
+      {showPreview && (
+        <QuotePreview
+          customerName={customerName}
+          customerEmail={customerEmail}
+          customerPhone={customerPhone}
+          items={items}
+          subtotal={subtotal}
+          gst={gst}
+          grandTotal={grandTotal}
+        />
+      )}
     </div>
   );
 }
