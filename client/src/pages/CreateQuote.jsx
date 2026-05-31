@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 import QuotePreview from "../components/quote/QuotePreview";
 
 export default function CreateQuote() {
@@ -6,6 +7,11 @@ export default function CreateQuote() {
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [showPreview, setShowPreview] = useState(false);
+  const quoteRef = useRef(null);
+  const handlePrint = useReactToPrint({
+    contentRef: quoteRef,
+    documentTitle: "Quotation",
+  });
 
   const [items, setItems] = useState([
     {
@@ -176,16 +182,28 @@ export default function CreateQuote() {
           Generate Quote
         </button>
       </div>
+
       {showPreview && (
-        <QuotePreview
-          customerName={customerName}
-          customerEmail={customerEmail}
-          customerPhone={customerPhone}
-          items={items}
-          subtotal={subtotal}
-          gst={gst}
-          grandTotal={grandTotal}
-        />
+        <>
+          <div ref={quoteRef}>
+            <QuotePreview
+              customerName={customerName}
+              customerEmail={customerEmail}
+              customerPhone={customerPhone}
+              items={items}
+              subtotal={subtotal}
+              gst={gst}
+              grandTotal={grandTotal}
+            />
+          </div>
+
+          <button
+            onClick={handlePrint}
+            className="mt-4 bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold"
+          >
+            Print / Save PDF
+          </button>
+        </>
       )}
     </div>
   );

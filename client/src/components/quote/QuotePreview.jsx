@@ -8,12 +8,12 @@ export default function QuotePreview({
   grandTotal,
 }) {
   return (
-    <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 mt-6">
-      <h3 className="text-2xl font-bold mb-6">
+    <div className="bg-slate-900 text-white p-8 rounded-xl border border-slate-800 mt-6">
+      <h3 className="text-3xl font-bold mb-8 text-white">
         Quote Preview
       </h3>
 
-      <div className="space-y-2 mb-8">
+      <div className="space-y-2 mb-8 text-white">
         <p>
           <strong>Customer:</strong> {customerName}
         </p>
@@ -27,7 +27,7 @@ export default function QuotePreview({
         </p>
       </div>
 
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse text-white">
         <thead>
           <tr className="border-b border-slate-700">
             <th className="text-left py-3">
@@ -74,7 +74,7 @@ export default function QuotePreview({
         </tbody>
       </table>
 
-      <div className="mt-8 space-y-2">
+      <div className="mt-8 space-y-2 text-white">
         <div className="flex justify-between">
           <span>Subtotal</span>
           <span>₹{subtotal.toFixed(2)}</span>
