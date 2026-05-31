@@ -7,6 +7,8 @@ export default function CreateQuote() {
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [showPreview, setShowPreview] = useState(false);
+  const [generatedQuote, setGeneratedQuote] = useState(null);
+
   const quoteRef = useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -51,7 +53,7 @@ export default function CreateQuote() {
 
   const subtotal = items.reduce(
     (total, item) => total + item.quantity * item.price,
-    0,
+    0
   );
 
   const gst = subtotal * 0.18;
@@ -78,13 +80,19 @@ export default function CreateQuote() {
       subtotal,
       gst,
       grandTotal,
+      status: "Draft",
       createdAt: new Date().toISOString(),
     };
 
-    const existingQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
+    const existingQuotes =
+      JSON.parse(localStorage.getItem("quotes")) || [];
 
-    localStorage.setItem("quotes", JSON.stringify([...existingQuotes, quote]));
+    localStorage.setItem(
+      "quotes",
+      JSON.stringify([...existingQuotes, quote])
+    );
 
+    setGeneratedQuote(quote);
     setShowPreview(true);
   };
 
@@ -98,7 +106,9 @@ export default function CreateQuote() {
 
       {/* Customer Information */}
       <div className="bg-slate-900 p-6 rounded-xl border border-slate-800">
-        <h3 className="text-xl font-semibold mb-6">Customer Information</h3>
+        <h3 className="text-xl font-semibold mb-6">
+          Customer Information
+        </h3>
 
         <div className="grid md:grid-cols-2 gap-4">
           <input
@@ -130,7 +140,9 @@ export default function CreateQuote() {
       {/* Quote Items */}
       <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 mt-6">
         <div className="flex justify-between items-center mb-6">
-          <h3 className="text-xl font-semibold">Quote Items</h3>
+          <h3 className="text-xl font-semibold">
+            Quote Items
+          </h3>
 
           <button
             onClick={addItem}
@@ -142,12 +154,21 @@ export default function CreateQuote() {
 
         <div className="space-y-4">
           {items.map((item, index) => (
-            <div key={index} className="grid md:grid-cols-5 gap-4">
+            <div
+              key={index}
+              className="grid md:grid-cols-5 gap-4"
+            >
               <input
                 type="text"
                 placeholder="Item Name"
                 value={item.itemName}
-                onChange={(e) => updateItem(index, "itemName", e.target.value)}
+                onChange={(e) =>
+                  updateItem(
+                    index,
+                    "itemName",
+                    e.target.value
+                  )
+                }
                 className="bg-slate-950 border border-slate-700 rounded-lg px-4 py-3"
               />
 
@@ -156,7 +177,11 @@ export default function CreateQuote() {
                 placeholder="Quantity"
                 value={item.quantity}
                 onChange={(e) =>
-                  updateItem(index, "quantity", Number(e.target.value))
+                  updateItem(
+                    index,
+                    "quantity",
+                    Number(e.target.value)
+                  )
                 }
                 className="bg-slate-950 border border-slate-700 rounded-lg px-4 py-3"
               />
@@ -166,7 +191,11 @@ export default function CreateQuote() {
                 placeholder="Price"
                 value={item.price}
                 onChange={(e) =>
-                  updateItem(index, "price", Number(e.target.value))
+                  updateItem(
+                    index,
+                    "price",
+                    Number(e.target.value)
+                  )
                 }
                 className="bg-slate-950 border border-slate-700 rounded-lg px-4 py-3"
               />
@@ -185,8 +214,12 @@ export default function CreateQuote() {
           ))}
         </div>
       </div>
+
+      {/* Summary */}
       <div className="bg-slate-900 p-6 rounded-xl border border-slate-800 mt-6">
-        <h3 className="text-xl font-semibold mb-6">Quote Summary</h3>
+        <h3 className="text-xl font-semibold mb-6">
+          Quote Summary
+        </h3>
 
         <div className="space-y-4 text-lg">
           <div className="flex justify-between">
@@ -205,6 +238,7 @@ export default function CreateQuote() {
           </div>
         </div>
       </div>
+
       <div className="mt-6">
         <button
           onClick={generateQuote}
@@ -214,10 +248,12 @@ export default function CreateQuote() {
         </button>
       </div>
 
-      {showPreview && (
+      {showPreview && generatedQuote && (
         <>
           <div ref={quoteRef}>
             <QuotePreview
+              quoteId={generatedQuote.id}
+              createdAt={generatedQuote.createdAt}
               customerName={customerName}
               customerEmail={customerEmail}
               customerPhone={customerPhone}

@@ -1,8 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { useReactToPrint } from "react-to-print";
+
+import QuotePreview from "../components/quote/QuotePreview";
 
 export default function QuoteDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const quoteRef = useRef(null);
 
   const quotes =
     JSON.parse(localStorage.getItem("quotes")) || [];
@@ -10,6 +15,11 @@ export default function QuoteDetails() {
   const quote = quotes.find(
     (q) => q.id.toString() === id
   );
+
+  const handlePrint = useReactToPrint({
+    contentRef: quoteRef,
+    documentTitle: `Quote_${quote?.customerName}`,
+  });
 
   if (!quote) {
     return (
@@ -41,12 +51,21 @@ export default function QuoteDetails() {
           </p>
         </div>
 
-        <button
-          onClick={() => navigate("/quotes")}
-          className="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg"
-        >
-          ← Back to Quotes
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={handlePrint}
+            className="bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg"
+          >
+            Download PDF
+          </button>
+
+          <button
+            onClick={() => navigate("/quotes")}
+            className="bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg"
+          >
+            ← Back to Quotes
+          </button>
+        </div>
       </div>
 
       {/* Quote Info */}
@@ -204,6 +223,23 @@ export default function QuoteDetails() {
             </div>
           </>
         )}
+      </div>
+
+      {/* Hidden Printable Version */}
+      <div className="hidden">
+        <div ref={quoteRef}>
+          <QuotePreview
+            quoteId={quote.id}
+            createdAt={quote.createdAt}
+            customerName={quote.customerName}
+            customerEmail={quote.customerEmail}
+            customerPhone={quote.customerPhone}
+            items={quote.items}
+            subtotal={quote.subtotal}
+            gst={quote.gst}
+            grandTotal={quote.grandTotal}
+          />
+        </div>
       </div>
     </div>
   );

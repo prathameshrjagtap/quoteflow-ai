@@ -10,9 +10,7 @@ export default function Sidebar() {
 
   return (
     <aside className="w-60 bg-slate-900 border-r border-slate-800 p-6">
-      <h1 className="text-2xl font-bold mb-10">
-        QuoteFlow AI
-      </h1>
+      <h1 className="text-2xl font-bold mb-10">QuoteFlow AI</h1>
 
       <nav className="space-y-2">
         <NavLink to="/" className={navClass} end>
@@ -31,9 +29,16 @@ export default function Sidebar() {
           Customers
         </button>
 
-        <button className="block w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-blue-400">
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            `block px-4 py-3 rounded-lg transition ${
+              isActive ? "bg-blue-600 text-white" : "hover:bg-slate-800"
+            }`
+          }
+        >
           Settings
-        </button>
+        </NavLink>
       </nav>
     </aside>
   );
