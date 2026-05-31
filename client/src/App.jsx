@@ -4,6 +4,8 @@ import Sidebar from "./components/layout/Sidebar";
 import Quotes from "./pages/Quotes";
 import Dashboard from "./pages/Dashboard";
 import CreateQuote from "./pages/CreateQuote";
+import QuoteDetails from "./pages/QuoteDetails";
+
 
 export default function App() {
   return (
@@ -13,18 +15,10 @@ export default function App() {
 
         <main className="flex-1 p-8">
           <Routes>
-            <Route
-              path="/"
-              element={<Dashboard />}
-            />
-            <Route
-              path="/quotes"
-              element={<Quotes />}
-            />
-            <Route
-              path="/create-quote"
-              element={<CreateQuote />}
-            />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/quotes" element={<Quotes />} />
+            <Route path="/quotes/:id" element={<QuoteDetails />} />
+            <Route path="/create-quote" element={<CreateQuote />} />
           </Routes>
         </main>
       </div>
