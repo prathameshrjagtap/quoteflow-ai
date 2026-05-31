@@ -8,6 +8,7 @@ export default function CreateQuote() {
   const [customerPhone, setCustomerPhone] = useState("");
   const [showPreview, setShowPreview] = useState(false);
   const quoteRef = useRef(null);
+
   const handlePrint = useReactToPrint({
     contentRef: quoteRef,
     documentTitle: "Quotation",
@@ -56,6 +57,36 @@ export default function CreateQuote() {
   const gst = subtotal * 0.18;
 
   const grandTotal = subtotal + gst;
+
+  const generateQuote = () => {
+    if (!customerName.trim()) {
+      alert("Please enter customer name");
+      return;
+    }
+
+    if (items.every((item) => !item.itemName.trim())) {
+      alert("Please add at least one item");
+      return;
+    }
+
+    const quote = {
+      id: Date.now(),
+      customerName,
+      customerEmail,
+      customerPhone,
+      items,
+      subtotal,
+      gst,
+      grandTotal,
+      createdAt: new Date().toISOString(),
+    };
+
+    const existingQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
+
+    localStorage.setItem("quotes", JSON.stringify([...existingQuotes, quote]));
+
+    setShowPreview(true);
+  };
 
   return (
     <div className="max-w-5xl">
@@ -176,7 +207,7 @@ export default function CreateQuote() {
       </div>
       <div className="mt-6">
         <button
-          onClick={() => setShowPreview(true)}
+          onClick={generateQuote}
           className="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-semibold"
         >
           Generate Quote

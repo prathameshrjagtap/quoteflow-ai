@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Sidebar from "./components/layout/Sidebar";
-
+import Quotes from "./pages/Quotes";
 import Dashboard from "./pages/Dashboard";
 import CreateQuote from "./pages/CreateQuote";
 
@@ -17,7 +17,10 @@ export default function App() {
               path="/"
               element={<Dashboard />}
             />
-
+            <Route
+              path="/quotes"
+              element={<Quotes />}
+            />
             <Route
               path="/create-quote"
               element={<CreateQuote />}
