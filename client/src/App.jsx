@@ -1,28 +1,64 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+
 import Sidebar from "./components/layout/Sidebar";
-import Quotes from "./pages/Quotes";
 import Dashboard from "./pages/Dashboard";
-import CreateQuote from "./pages/CreateQuote";
+import Quotes from "./pages/Quotes";
 import QuoteDetails from "./pages/QuoteDetails";
+import CreateQuote from "./pages/CreateQuote";
+import EditQuote from "./pages/EditQuote";
+import Customers from "./pages/Customers";
+import CustomerDetails from "./pages/CustomerDetails";
 import Settings from "./pages/Settings";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
+function AppShell() {
+  return (
+    <div className="min-h-screen bg-slate-950 text-white flex">
+      <Sidebar />
+      <main className="flex-1 p-8 overflow-y-auto">
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/quotes" element={<Quotes />} />
+          <Route path="/quotes/:id" element={<QuoteDetails />} />
+          <Route path="/quotes/:id/edit" element={<EditQuote />} />
+          <Route path="/create-quote" element={<CreateQuote />} />
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/customers/:id" element={<CustomerDetails />} />
+          <Route path="/settings" element={<Settings />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-slate-950 text-white flex">
-        <Sidebar />
+      <AuthProvider>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
-        <main className="flex-1 p-8">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/quotes" element={<Quotes />} />
-            <Route path="/quotes/:id" element={<QuoteDetails />} />
-            <Route path="/create-quote" element={<CreateQuote />} />
-            <Route path="/settings" element={<Settings />} />
-          </Routes>
-        </main>
-      </div>
+          {/* All other routes are protected */}
+          <Route
+            path="/*"
+            element={
+              <ProtectedRoute>
+                <AppShell />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   );
 }
