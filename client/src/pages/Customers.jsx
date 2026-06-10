@@ -67,27 +67,27 @@ export default function Customers() {
             <div
               key={customer.id}
               onClick={() => navigate(`/customers/${customer.id}`)}
-              className="bg-slate-900 p-6 rounded-xl border border-slate-800 hover:border-blue-500 transition-all duration-200 cursor-pointer"
+              className="bg-slate-900 p-4 md:p-6 rounded-xl border border-slate-800 hover:border-blue-500 transition-all duration-200 cursor-pointer"
             >
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-lg font-bold shrink-0">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-blue-600 flex items-center justify-center text-base md:text-lg font-bold shrink-0">
                     {customer.name.charAt(0).toUpperCase()}
                   </div>
-                  <div>
-                    <h3 className="text-xl font-semibold">{customer.name}</h3>
-                    <p className="text-slate-400 text-sm mt-0.5">
+                  <div className="min-w-0">
+                    <h3 className="text-base md:text-xl font-semibold truncate">{customer.name}</h3>
+                    <p className="text-slate-400 text-xs md:text-sm truncate">
                       {customer.email || "—"}
                     </p>
-                    <p className="text-slate-500 text-sm">
+                    <p className="text-slate-500 text-xs">
                       {customer.phone || "—"}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6">
+                <div className="flex items-center gap-3 shrink-0">
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-blue-400">
+                    <p className="text-xl md:text-2xl font-bold text-blue-400">
                       {customer.total_quotes}
                     </p>
                     <p className="text-slate-500 text-xs">
@@ -99,7 +99,7 @@ export default function Customers() {
                       e.stopPropagation();
                       handleDelete(customer.id);
                     }}
-                    className="bg-red-600 hover:bg-red-700 transition-colors px-4 py-2 rounded-lg text-sm"
+                    className="bg-red-600 hover:bg-red-700 transition-colors px-3 py-1.5 rounded-lg text-xs md:text-sm"
                   >
                     Delete
                   </button>

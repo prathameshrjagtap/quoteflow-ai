@@ -293,69 +293,87 @@ export default function CreateQuote() {
           <p className="text-slate-500 text-xs uppercase tracking-wide"></p>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {items.map((item, index) => {
             const ps = priceSuggestions[index];
 
             return (
               <div key={index} className="space-y-2">
-                <div className="grid md:grid-cols-5 gap-4">
-                  <input
-                    type="text"
-                    placeholder="e.g. Web Design"
-                    value={item.itemName}
-                    onChange={(e) => updateItem(index, "itemName", e.target.value)}
-                    className={inputClass}
-                  />
-                  <input
-                    type="number"
-                    placeholder="Qty"
-                    min={1}
-                    value={item.quantity}
-                    onChange={(e) =>
-                      updateItem(index, "quantity", Number(e.target.value))
-                    }
-                    className={inputClass}
-                  />
+                {/* Mobile: stacked layout. Desktop: grid */}
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                  {/* Item name — full width on mobile */}
+                  <div className="col-span-2 md:col-span-1">
+                    <label className="md:hidden block text-slate-500 text-xs mb-1">Item Name</label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Web Design"
+                      value={item.itemName}
+                      onChange={(e) => updateItem(index, "itemName", e.target.value)}
+                      className={inputClass + " w-full"}
+                    />
+                  </div>
 
-                  {/* Price + optional AI button */}
-                  <div className="flex gap-2">
+                  {/* Qty */}
+                  <div>
+                    <label className="md:hidden block text-slate-500 text-xs mb-1">Quantity</label>
                     <input
                       type="number"
-                      placeholder="Price (₹)"
-                      min={0}
-                      value={item.price}
+                      placeholder="Qty"
+                      min={1}
+                      value={item.quantity}
                       onChange={(e) =>
-                        updateItem(index, "price", Number(e.target.value))
+                        updateItem(index, "quantity", Number(e.target.value))
                       }
-                      className={`${inputClass} flex-1 min-w-0`}
+                      className={inputClass + " w-full"}
                     />
-                    {AI_ENABLED && (
-                      <button
-                        onClick={() => handleSuggestPrice(index)}
-                        disabled={!item.itemName.trim() || ps?.loading}
-                        title="AI price suggestion"
-                        className="bg-violet-600 hover:bg-violet-700 disabled:bg-slate-700 disabled:cursor-not-allowed transition-colors rounded-lg px-3 text-sm font-medium shrink-0"
-                      >
-                        {ps?.loading ? (
-                          <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        ) : (
-                          "✨"
-                        )}
-                      </button>
-                    )}
                   </div>
 
-                  <div className={`${inputClass} flex items-center font-medium`}>
-                    ₹{(item.quantity * item.price).toFixed(2)}
+                  {/* Price + AI button */}
+                  <div>
+                    <label className="md:hidden block text-slate-500 text-xs mb-1">Price (₹)</label>
+                    <div className="flex gap-2">
+                      <input
+                        type="number"
+                        placeholder="Price (₹)"
+                        min={0}
+                        value={item.price}
+                        onChange={(e) =>
+                          updateItem(index, "price", Number(e.target.value))
+                        }
+                        className={`${inputClass} flex-1 min-w-0`}
+                      />
+                      {AI_ENABLED && (
+                        <button
+                          onClick={() => handleSuggestPrice(index)}
+                          disabled={!item.itemName.trim() || ps?.loading}
+                          title="AI price suggestion"
+                          className="bg-violet-600 hover:bg-violet-700 disabled:bg-slate-700 disabled:cursor-not-allowed transition-colors rounded-lg px-3 text-sm font-medium shrink-0"
+                        >
+                          {ps?.loading ? (
+                            <span className="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                          ) : "✨"}
+                        </button>
+                      )}
+                    </div>
                   </div>
 
-                  <button
-                    onClick={() => removeItem(index)}
-                    className="bg-red-600 hover:bg-red-700 rounded-lg px-4 py-3"
-                  >
-                    Delete
-                  </button>
+                  {/* Line total */}
+                  <div>
+                    <label className="md:hidden block text-slate-500 text-xs mb-1">Line Total</label>
+                    <div className={`${inputClass} flex items-center font-medium w-full`}>
+                      ₹{(item.quantity * item.price).toFixed(2)}
+                    </div>
+                  </div>
+
+                  {/* Delete */}
+                  <div className="flex items-end">
+                    <button
+                      onClick={() => removeItem(index)}
+                      className="w-full bg-red-600 hover:bg-red-700 rounded-lg px-4 py-3 text-sm"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
 
                 {/* AI Price Suggestion Card */}

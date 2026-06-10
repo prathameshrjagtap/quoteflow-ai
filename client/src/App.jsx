@@ -21,7 +21,8 @@ function AppShell() {
   return (
     <div className="min-h-screen bg-slate-950 text-white flex">
       <Sidebar />
-      <main className="flex-1 p-8 overflow-y-auto">
+      {/* pt-14 on mobile offsets the fixed top bar height; no offset needed on md+ */}
+      <main className="flex-1 p-4 md:p-8 pt-16 md:pt-8 overflow-y-auto min-w-0">
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/quotes" element={<Quotes />} />
