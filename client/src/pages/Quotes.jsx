@@ -25,7 +25,7 @@ export default function Quotes() {
 
   useEffect(() => {
     loadQuotes();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const loadQuotes = async () => {
@@ -63,10 +63,10 @@ export default function Quotes() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Paid":       return "bg-green-600";
-      case "Approved":   return "bg-blue-600";
-      case "Sent":       return "bg-yellow-600";
-      default:           return "bg-slate-600";
+      case "Paid": return "bg-green-600";
+      case "Approved": return "bg-blue-600";
+      case "Sent": return "bg-yellow-600";
+      default: return "bg-slate-600";
     }
   };
 
@@ -78,10 +78,10 @@ export default function Quotes() {
         start.setHours(0, 0, 0, 0);
         return start;
       }
-      case "7days":  return new Date(now - 7  * 24 * 60 * 60 * 1000);
+      case "7days": return new Date(now - 7 * 24 * 60 * 60 * 1000);
       case "30days": return new Date(now - 30 * 24 * 60 * 60 * 1000);
       case "90days": return new Date(now - 90 * 24 * 60 * 60 * 1000);
-      default:       return null;
+      default: return null;
     }
   };
 
@@ -91,7 +91,7 @@ export default function Quotes() {
 
     return quotes.filter((quote) => {
       if (term) {
-        const nameMatch  = quote.customer_name.toLowerCase().includes(term);
+        const nameMatch = quote.customer_name.toLowerCase().includes(term);
         const emailMatch = quote.customer_email.toLowerCase().includes(term);
         if (!nameMatch && !emailMatch) return false;
       }
@@ -101,7 +101,7 @@ export default function Quotes() {
         return false;
       return true;
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quotes, search, statusFilter, dateFilter]);
 
   const clearFilters = () => {
@@ -196,9 +196,25 @@ export default function Quotes() {
       </p>
 
       {/* List */}
+      {/* Empty State */}
       {quotes.length === 0 ? (
         <div className="bg-slate-900 p-8 rounded-xl border border-slate-800 text-center">
-          <p className="text-slate-400">No quotes found.</p>
+          <h3 className="text-2xl font-semibold mb-3">
+            No quotations yet
+          </h3>
+
+          <p className="text-slate-400 max-w-md mx-auto">
+            Create your first quotation, export it as a PDF, send it to your client,
+            then update its status as it progresses through your sales pipeline.
+          </p>
+
+          <button
+            onClick={() => navigate("/create-quote")}
+            className="mt-6 bg-blue-600 hover:bg-blue-700 px-5 py-3 rounded-lg font-medium transition-colors"
+          >
+            Create Your First Quote
+          </button>
+
         </div>
       ) : filteredQuotes.length === 0 ? (
         <div className="bg-slate-900 p-8 rounded-xl border border-slate-800 text-center">

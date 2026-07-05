@@ -32,10 +32,10 @@ export default function CustomerDetails() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Paid":     return "bg-green-600";
+      case "Paid": return "bg-green-600";
       case "Approved": return "bg-blue-600";
-      case "Sent":     return "bg-yellow-600";
-      default:         return "bg-slate-600";
+      case "Sent": return "bg-yellow-600";
+      default: return "bg-slate-600";
     }
   };
 
@@ -123,9 +123,28 @@ export default function CustomerDetails() {
       <div>
         <h3 className="text-2xl font-bold mb-4">Quotations</h3>
 
+        {/* =========================
+    Empty State
+    Displayed when this customer has no quotations.
+========================= */}
         {relatedQuotes.length === 0 ? (
-          <div className="bg-slate-900 p-8 rounded-xl border border-slate-800 text-center">
-            <p className="text-slate-400">No quotes found for this customer.</p>
+          <div className="bg-slate-900 p-10 rounded-xl border border-slate-800 text-center">
+
+            <h3 className="text-xl font-semibold mb-2">
+              No quotations yet
+            </h3>
+
+            <p className="text-slate-400 max-w-md mx-auto">
+              Create a new quotation for this customer to start tracking their pipeline and revenue.
+            </p>
+
+            <button
+              onClick={() => navigate("/create-quote")}
+              className="mt-6 bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg font-medium transition-colors"
+            >
+              Create New Quote
+            </button>
+
           </div>
         ) : (
           <div className="space-y-4">

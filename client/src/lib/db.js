@@ -127,21 +127,28 @@ export async function upsertCustomer(userId, { name, email, phone }) {
   const normalizedEmail = email.trim().toLowerCase();
 
   // Try to increment existing customer's quote count
-  const { data: existing } = await supabase
+  // Check if customer already exists
+  const { data: existing, error: fetchError } = await supabase
     .from("customers")
     .select("id, total_quotes")
     .eq("user_id", userId)
     .eq("email", normalizedEmail)
-    .single();
+    .maybeSingle();
+
+  if (fetchError) throw fetchError;
 
   if (existing) {
+    // Existing customer → increment quote count
     const { error } = await supabase
       .from("customers")
-      .update({ total_quotes: existing.total_quotes + 1 })
+      .update({
+        total_quotes: existing.total_quotes + 1,
+      })
       .eq("id", existing.id);
 
     if (error) throw error;
   } else {
+    // New customer → create customer
     const { error } = await supabase
       .from("customers")
       .insert({
@@ -184,10 +191,10 @@ export async function fetchSettings(userId) {
     .from("settings")
     .select("*")
     .eq("user_id", userId)
-    .single();
+    .maybeSingle();
 
   // No row yet is not an error — just return null
-  if (error && error.code === "PGRST116") return null;
+  //if (error && error.code === "PGRST116") return null;
   if (error) throw error;
   return data;
 }

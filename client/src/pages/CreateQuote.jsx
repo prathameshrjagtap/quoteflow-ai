@@ -1,7 +1,7 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useReactToPrint } from "react-to-print";
 import { useAuth } from "../context/AuthContext";
-import { createQuote, upsertCustomer } from "../lib/db";
+import { createQuote, upsertCustomer, fetchSettings, } from "../lib/db";
 import { suggestPrice, generateQuoteSummary } from "../lib/ai";
 import QuotePreview from "../components/quote/QuotePreview";
 
@@ -21,6 +21,7 @@ export default function CreateQuote() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [showPreview, setShowPreview] = useState(false);
   const [generatedQuote, setGeneratedQuote] = useState(null);
+  const [businessSettings, setBusinessSettings] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
 
@@ -31,6 +32,20 @@ export default function CreateQuote() {
   const [priceSuggestions, setPriceSuggestions] = useState({});
 
   const quoteRef = useRef(null);
+
+  // Load logged-in user's business settings
+  useEffect(() => {
+    async function loadBusinessSettings() {
+      try {
+        const settings = await fetchSettings(user.id);
+        setBusinessSettings(settings);
+      } catch (err) {
+        console.error("Failed to load business settings:", err);
+      }
+    }
+
+    loadBusinessSettings();
+  }, [user.id]);
 
   const handlePrint = useReactToPrint({
     contentRef: quoteRef,
@@ -530,6 +545,7 @@ export default function CreateQuote() {
         <>
           <div ref={quoteRef}>
             <QuotePreview
+              businessSettings={businessSettings} 
               quoteId={generatedQuote.id}
               quoteNumber={generatedQuote.quote_number}
               createdAt={generatedQuote.created_at}

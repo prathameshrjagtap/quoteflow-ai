@@ -1,4 +1,5 @@
 export default function QuotePreview({
+  settings,
   quoteId,
   quoteNumber,
   createdAt,
@@ -11,8 +12,8 @@ export default function QuotePreview({
   grandTotal,
   aiSummary,
 }) {
-  const settings =
-    JSON.parse(localStorage.getItem("businessSettings")) || {};
+  
+  settings = settings || {};
 
   return (
     <div className="bg-slate-900 text-white p-8 rounded-xl border border-slate-800 mt-6">

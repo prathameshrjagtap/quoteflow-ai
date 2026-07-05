@@ -54,12 +54,28 @@ export default function Customers() {
         </div>
       </div>
 
+      {/* =========================
+    Empty State
+    Displayed when the user has no customers yet.
+========================= */}
       {customers.length === 0 ? (
-        <div className="bg-slate-900 p-8 rounded-xl border border-slate-800 text-center">
-          <p className="text-slate-400 text-lg">No customers yet.</p>
-          <p className="text-slate-500 text-sm mt-2">
-            Customers are added automatically when you create a quote.
+        <div className="bg-slate-900 p-10 rounded-xl border border-slate-800 text-center">
+
+          <h3 className="text-xl font-semibold mb-2">
+            No customers yet
+          </h3>
+
+          <p className="text-slate-400 max-w-md mx-auto">
+            Customers are created automatically when you save your first quotation.
           </p>
+
+          <button
+            onClick={() => navigate("/create-quote")}
+            className="mt-6 bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg font-medium transition-colors"
+          >
+            Create Your First Quote
+          </button>
+
         </div>
       ) : (
         <div className="space-y-4">
