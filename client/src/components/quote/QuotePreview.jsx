@@ -12,7 +12,7 @@ export default function QuotePreview({
   grandTotal,
   aiSummary,
 }) {
-  
+
   settings = settings || {};
 
   return (

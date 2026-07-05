@@ -24,6 +24,8 @@ export default function CreateQuote() {
   const [businessSettings, setBusinessSettings] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+  // Prevent duplicate quote creation
+  const [quoteGenerated, setQuoteGenerated] = useState(false);
 
   // AI state
   const [aiSummary, setAiSummary] = useState("");
@@ -167,6 +169,9 @@ export default function CreateQuote() {
 
   // ── Save quote ────────────────────────────────────────────────────────────
   const generateQuote = async () => {
+    // Prevent duplicate quote creation
+    if (quoteGenerated) return;
+
     if (!validate()) return;
 
     setSaving(true);
@@ -191,6 +196,10 @@ export default function CreateQuote() {
 
       setGeneratedQuote(quote);
       setShowPreview(true);
+
+      // Mark this quote as already generated
+      setQuoteGenerated(true);
+
     } catch (err) {
       setSaveError("Failed to save quote. Please try again.");
       console.error(err);
@@ -530,22 +539,26 @@ export default function CreateQuote() {
       <div className="mt-6 flex items-center gap-4">
         <button
           onClick={generateQuote}
-          disabled={saving}
+          disabled={saving || quoteGenerated}
           className="bg-green-600 hover:bg-green-700 disabled:bg-green-800 disabled:cursor-not-allowed px-6 py-3 rounded-lg font-semibold transition-colors"
         >
-          {saving ? "Saving…" : "Generate Quote"}
+          {saving ? "Saving…" : quoteGenerated ? "Quote Generated" : "Generate Quote"}
         </button>
         {saveError && (
           <p className="text-red-400 text-sm">{saveError}</p>
         )}
       </div>
 
-      {/* PDF Preview */}
+      {/* ==========================================================
+    PDF Preview
+    Only this section is printable because it is wrapped
+    inside quoteRef.
+========================================================== */}
       {showPreview && generatedQuote && (
         <>
           <div ref={quoteRef}>
             <QuotePreview
-              businessSettings={businessSettings} 
+              businessSettings={businessSettings}
               quoteId={generatedQuote.id}
               quoteNumber={generatedQuote.quote_number}
               createdAt={generatedQuote.created_at}
@@ -559,6 +572,24 @@ export default function CreateQuote() {
               aiSummary={aiSummary}
             />
           </div>
+
+          {/* ==========================================================
+        Next Step (App UI Only)
+        This is NOT inside quoteRef,
+        so it will NOT appear in the exported PDF.
+    ========================================================== */}
+          <div className="mt-6 rounded-xl border border-blue-800 bg-blue-950/30 p-5">
+            <h3 className="text-lg font-semibold text-blue-300">
+              ✅ Next Step
+            </h3>
+
+            <p className="mt-2 text-sm text-slate-300 leading-6">
+              Download or print this quotation, send it to your customer,
+              then update its status from <strong>Draft</strong> to{" "}
+              <strong>Sent</strong> on the Quotes page.
+            </p>
+          </div>
+
           <button
             onClick={handlePrint}
             className="mt-4 bg-purple-600 hover:bg-purple-700 px-6 py-3 rounded-lg font-semibold"
